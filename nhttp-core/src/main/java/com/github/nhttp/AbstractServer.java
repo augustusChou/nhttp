@@ -1,4 +1,4 @@
-package com.github.server;
+package com.github.nhttp;
 
 import com.alibaba.fastjson.JSON;
 import io.netty.buffer.ByteBuf;

@@ -1,4 +1,4 @@
-package com.github.server.http;
+package com.github.nhttp.core;
 
 import io.netty.handler.codec.http.FullHttpRequest;
 

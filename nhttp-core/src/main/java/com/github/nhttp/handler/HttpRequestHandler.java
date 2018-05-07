@@ -1,4 +1,4 @@
-package com.github.server.http;
+package com.github.nhttp.handler;
 
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;

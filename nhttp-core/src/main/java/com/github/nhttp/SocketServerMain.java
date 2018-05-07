@@ -1,4 +1,4 @@
-package com.github.server;
+package com.github.nhttp;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

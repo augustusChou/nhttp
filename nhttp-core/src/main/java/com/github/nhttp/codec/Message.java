@@ -1,4 +1,4 @@
-package com.github.codec;
+package com.github.nhttp.codec;
 
 import io.netty.util.CharsetUtil;
 

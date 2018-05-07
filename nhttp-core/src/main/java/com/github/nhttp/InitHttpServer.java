@@ -1,6 +1,6 @@
-package com.github.server;
+package com.github.nhttp;
 
-import com.github.server.http.HttpRequestHandler;
+import com.github.nhttp.handler.HttpRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
