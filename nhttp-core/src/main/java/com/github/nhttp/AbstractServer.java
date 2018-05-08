@@ -22,38 +22,6 @@ abstract class AbstractServer {
     private static Logger LOG = LogManager.getLogger(AbstractServer.class);
 
 
-    /**
-     * 解析资源目录下的应用配置文件
-     *
-     * @return map结构的配置
-     */
-    static Map<String, String> parseConf() {
-        Map<String, String> confMap = new HashMap<>();
-
-        Properties props = new Properties();
-        InputStream in = InitHttpServer.class.getResourceAsStream("/application.properties");
-        try {
-            props.load(in);
-            in.close();
-        } catch (IOException ioE) {
-            LOG.error("无法读取到配置文件", ioE);
-        } catch (Exception e) {
-            LOG.error(e);
-        }
-
-        Enumeration en = props.propertyNames();
-        while (en.hasMoreElements()) {
-            String k = String.valueOf(en.nextElement());
-            confMap.put(k, props.getProperty(k));
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(JSON.toJSONString(confMap));
-        }
-
-        return confMap;
-    }
-
 
     static class HeartbeatHandler extends ChannelInboundHandlerAdapter {
         private final ByteBuf HEARTBEAT = Unpooled.copiedBuffer("HEARTBEAT", CharsetUtil.UTF_8);

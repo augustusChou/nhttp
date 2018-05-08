@@ -1,32 +1,32 @@
 package com.github.nhttp;
 
+import com.github.nhttp.core.HttpInitializer;
 import com.github.nhttp.handler.HttpRequestHandler;
+import com.github.nhttp.handler.SimpleCreateRequestHandler;
+import com.github.nhttp.router.Router;
+import com.github.nhttp.router.RouterHandler;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.*;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.CharsetUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class InitHttpServer extends AbstractServer {
     private Logger LOG = LogManager.getLogger(InitHttpServer.class);
 
-
-    public static void main(String[] args) throws Exception {
-        new InitHttpServer().init();
-    }
-
-
-    public void init() throws Exception {
-        Map<String, String> confMap = parseConf();
+    public void init(HttpInitializer initializer) throws Exception {
+        Map<String, String> confMap = initializer.getConfMap();
         int listenerPort = Integer.parseInt(confMap.getOrDefault("http.server.port", "7803"));
-
 
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workGroup = new NioEventLoopGroup();
@@ -35,7 +35,7 @@ public class InitHttpServer extends AbstractServer {
             bootstrap.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new HttpInitChannelHandler(confMap))
+                    .childHandler(initializer)
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             LOG.info("Http服务将于端口:{} 启动", listenerPort);
@@ -56,26 +56,7 @@ public class InitHttpServer extends AbstractServer {
                 e.printStackTrace();
             }
         }
-    }
 
-
-    private class HttpInitChannelHandler extends ChannelInitializer<Channel> {
-        /**
-         * application.properties 配置
-         */
-        private Map<String, String> confMap;
-
-        public HttpInitChannelHandler(Map<String, String> confMap) {
-            this.confMap = confMap;
-        }
-
-        @Override
-        protected void initChannel(Channel ch) throws Exception {
-            ChannelPipeline cp = ch.pipeline();
-            cp.addLast("codec", new HttpServerCodec());
-            cp.addLast("aggregator", new HttpObjectAggregator(65536));
-            cp.addLast("request", new HttpRequestHandler(this.confMap));
-        }
     }
 
 

@@ -21,7 +21,7 @@ public class SocketServerMain extends AbstractServer {
     private static Logger LOG = LogManager.getLogger(SocketServerMain.class);
 
     public static void main(String[] args) throws Exception {
-        Map<String, String> confMap = parseConf();
+        Map<String, String> confMap = null;
 
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workGroup = new NioEventLoopGroup();
